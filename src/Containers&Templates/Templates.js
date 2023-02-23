@@ -3,16 +3,7 @@ import '../Styling/output.css';
 
 import {motion} from 'framer-motion';
 
-/*
-Summary: This file defines the template components that will be movable
-         The templates represent the possible components that the user can place in the container components
-*/
-
-/**
- *  DirectoryTemplate: This template represents a directory of cards
- * @param {children} children: The children of the template
- * */
-function DirectoryTemplate({children}){
+function Template1({children}){
     return (
       <div className="h-full w-full flex flex-col p-8 rounded-2xl items-center bg-gray-800">
         {children}
@@ -20,11 +11,7 @@ function DirectoryTemplate({children}){
     );
 }
 
-/**
- * NoteTemplate: This template represents a note that the user writes in
- * @param {children} children: The children of the template
- * */
-function NoteTemplate({children}){
+function Template2({children}){
     return (
       <div className="h-full w-full flex flex-col p-8 rounded-2xl shadow-lg bg-gray-600">
         {children}
@@ -32,12 +19,8 @@ function NoteTemplate({children}){
     );
 }
 
-/**
- * OnlineTemplate: This template represents the online functionality of the app. Users can 
- *                 see related content, other users, and a feed of other users' notes
- * @param {children} children: The children of the template
- * */
-function OnlineTemplate({children}){
+
+function Template3({children}){
     return (
       <div className="h-full w-full flex flex-col p-8 rounded-2xl shadow-lg bg-gray-600">
         {children}
@@ -45,4 +28,4 @@ function OnlineTemplate({children}){
     );
 }
 
-export {DirectoryTemplate, NoteTemplate, OnlineTemplate};
+export {Template1, Template2, Template3};

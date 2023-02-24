@@ -1,46 +1,53 @@
-import './Styling/index.css';
-import './Styling/output.css';
+import { useState } from "react";
+import "./App.css";
+import { DndContext, closestCenter } from "@dnd-kit/core";
 
-import {useRef} from 'react';
-import {motion} from 'framer-motion';
+import {
+  arrayMove,
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  restrictToHorizontalAxis,
+  restrictToWindowEdges,
+} from "@dnd-kit/modifiers";
 
-import {Card, CardRow, CardRowContainer} from './CardDir/CardSection'
-import {Template1, Template2, Template3} from './Containers&Templates/Templates'
-import {ContainerPrimary, ContainerAuxilary} from './Containers&Templates/Containers'
+import Container from "./Components/Container";
 
 function App() {
-
-  const screenRef = useRef(null);
+  const [items, setItems] = useState(["A", "B", "C"]);
 
   return (
-    <div className="bg-gray-800 flex flex-row w-screen h-screen justify-evenly" ref={screenRef}>
-      <ContainerAuxilary>
-      <motion.div className="h-full" drag='x' dragConstraints={screenRef} dragMomentum={false}>
-        <Template1>
-        <CardRowContainer text="-" color='bg-blue-300'>{CardRow()}</CardRowContainer>
-        <CardRowContainer text="--" color='bg-green-300'>{CardRow()}</CardRowContainer>
-        <CardRowContainer text="---" color='bg-red-300'>{CardRow()}</CardRowContainer>
-        </Template1>
-        </motion.div>
-      </ContainerAuxilary>
-      <ContainerPrimary>
-        <motion.div className="h-full" drag='x' dragConstraints={screenRef} dragMomentum={false}>
-        <Template2 >
-        <h1 className="text-white font-extrabold text-2xl mx-auto">Hello, world!</h1>
-        <p className="text-white">Welcome to your new Tailwind CSS + React project!</p>
-        </Template2>
-        </motion.div>
-      </ContainerPrimary>
-      <ContainerAuxilary>
-      <motion.div className="h-full" drag='x' dragConstraints={screenRef} dragMomentum={false}>
-        <Template3>
-        <h1 className="text-white font-extrabold text-2xl mx-auto">Hello, world!</h1>
-        <p className="text-white">Welcome to your new Tailwind CSS + React project!</p>
-        </Template3>
-        </motion.div>
-      </ContainerAuxilary>
+    <div className="bg-gray-800 flex flex-row w-screen h-screen justify-evenly">
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToHorizontalAxis, restrictToWindowEdges]}
+      >
+        <SortableContext items={items} strategy={horizontalListSortingStrategy}>
+          {items.map((item, index) => (
+            <Container key={item} id={item} index={index} />
+          ))}
+        </SortableContext>
+      </DndContext>
     </div>
   );
+
+  function handleDragEnd(event) {
+    console.log("Drag end called");
+    const { active, over } = event;
+    console.log("ACTIVE: " + active.id);
+    console.log("OVER :" + over.id);
+
+    if (active.id !== over.id) {
+      setItems((items) => {
+        const activeIndex = items.indexOf(active.id);
+        const overIndex = items.indexOf(over.id);
+        console.log(arrayMove(items, activeIndex, overIndex));
+        return arrayMove(items, activeIndex, overIndex);
+      });
+    }
+  }
 }
 
 export default App;
